@@ -62,11 +62,11 @@ def print_array(a):
 def create_tree(a):
 	arr = [];
 
-	while (len(a) != 0):
+	while (len(a) != 1):
 
 		left = a.pop(0);
 		right = a.pop(0);
-	
+
 		left.sibling = right;
 		right.sibling = left;
 	
@@ -79,19 +79,34 @@ def create_tree(a):
 
 		arr.append(TreeRoot);
 
-	return arr;
+		a.append(TreeRoot.root);
+		a = sort_array(a);
+	return arr;		
 
-def print_tree(a):
-	for i in range(len(a)):
-		print("  "),
-		print(a[i].root.char)
-		print(" /  \ ")
-		print(a[i].root.left.char),
-		print("  "),
-		print(a[i].root.right.char)	
+def print_tree(root, code_arr, top):
+
+	if (root.left):
+		code_arr[top] = 0;
+		print_tree(root.left, code_arr, top + 1);
+
+	if (root.right):
+		code_arr[top] = 1;
+               	print_tree(root.right, code_arr, top + 1);
+
+	if (not root.right and not root.left):
+		print(root.char), 
+		print(": "),
+		print_arr(code_arr, top);
+		
+def print_arr(arr, size):
+	for i in range(size):
+		print(arr[i]),
+	print("\n");
 
 array = read_file();
 sort_array(array);
 print_array(array);
-arr = create_tree(array);
-print_tree(arr);
+rt_arr = create_tree(array);
+tr_root = rt_arr[len(rt_arr) - 1];
+code_array = [None]*100;
+print_tree(tr_root.root, code_array, 0);
