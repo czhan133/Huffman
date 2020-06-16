@@ -7,10 +7,6 @@ class FreqNode:
 		self.parent = None;
 		self.sibling = None;		
 
-class Tree:
-	def __init__(self, root):
-		self.root = FreqNode('~', root); #root is going to be the root freq
-
 def read_file():
 	ifile = open('huff.txt', 'r');
 	
@@ -56,8 +52,9 @@ def sort_array(a):
 def print_array(a):
 	for i in range(len(a)):
 		print(a[i].char),
-		print(" "),
+		print(": "),
 		print(a[i].freq)
+		print("\n");
 
 def create_tree(a):
 	arr = [];
@@ -70,27 +67,37 @@ def create_tree(a):
 		left.sibling = right;
 		right.sibling = left;
 	
-		TreeRoot = Tree(right.freq + left.freq);
-		TreeRoot.root.left = left;
-		TreeRoot.root.right = right;
+		#TreeRoot = Tree(right.freq + left.freq);
+		#TreeRoot.root.left = left;
+		#TreeRoot.root.right = right;
 	
-		left.parent = TreeRoot.root;
-		right.parent = TreeRoot.root;
+		#left.parent = TreeRoot.root;
+		#right.parent = TreeRoot.root;
 
-		arr.append(TreeRoot);
+		#arr.append(TreeRoot);
 
-		a.append(TreeRoot.root);
+		#a.append(TreeRoot.root);
+		
+		TreeRoot = FreqNode('~', left.freq + right.freq);
+
+		left.parent = TreeRoot;
+		right.parent = TreeRoot;
+		TreeRoot.left = left;
+		TreeRoot.right = right;
+	
+		a.append(TreeRoot);
+
 		a = sort_array(a);
-	return arr;		
+	return TreeRoot;		
 
 def print_tree(root, code_arr, top):
 
 	if (root.left):
-		code_arr[top] = 0;
+		code_arr[top] = 1;
 		print_tree(root.left, code_arr, top + 1);
 
 	if (root.right):
-		code_arr[top] = 1;
+		code_arr[top] = 0;
                	print_tree(root.right, code_arr, top + 1);
 
 	if (not root.right and not root.left):
@@ -106,7 +113,6 @@ def print_arr(arr, size):
 array = read_file();
 sort_array(array);
 print_array(array);
-rt_arr = create_tree(array);
-tr_root = rt_arr[len(rt_arr) - 1];
+tr_root = create_tree(array);
 code_array = [None]*100;
-print_tree(tr_root.root, code_array, 0);
+print_tree(tr_root, code_array, 0);
