@@ -110,6 +110,9 @@ def print_arr(arr, size):
 		print(arr[i]),
 	print("\n");
 
+def does_nothing():
+	print("I do nothing");
+
 array = read_file();
 sort_array(array);
 print_array(array);
